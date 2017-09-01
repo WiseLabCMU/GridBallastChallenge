@@ -24,7 +24,6 @@
 #include "msg.h"
 
 /* Baudrate settings are defined in <asm/termbits.h>, which is included by <termios.h> */
-//#define BAUDRATE B38400
 #define BAUDRATE B19200
 
 #define FTDI_SETUP_UDELAY    (100 * 1000)
@@ -34,11 +33,6 @@
 #define DEFAULT_MODEM_DEVICE "/dev/ttyUSB0"
 
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
-
-#define FALSE 0
-#define TRUE 1
-
-//volatile int STOP = FALSE;
 
 #define URANDOM_DEVICE "/dev/urandom"
 
@@ -143,7 +137,7 @@ void printusage() {
 	printf("This program uses the Linux termios interface to interrogate the devname serial device.\n");
 	printf("It's purpose is to determine if the attached serial device can speak a special mark/space serial protocol.\n");
 	printf("This is done by sending two random 32 bit value to the device and receiving them summation of those values.\n");
-	printf("This program will output a sucess message if the device passed the challenge and a failure message is the device did not pass.\n");
+	printf("This program will output a \"# Success -\" message if the device passed the challenge and an \"Error -\" message is the device did not pass.\n");
 	printf("\n");
 	printf("devname - The path to the serial modem to interrogate. [/dev/ttyUSB0]\n");
 }
@@ -217,7 +211,6 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
-//	tcgetattr(fd, &oldtio); /* save current serial port settings */
 	bzero(&newtio, sizeof(newtio)); /* clear struct for new port settings */
 
 
@@ -291,34 +284,10 @@ int main(int argc, char *argv[]) {
 //	newtio.c_lflag = ICANON;
 	newtio.c_lflag = 0;
 
-		/*
-		 initialize all control characters
-		 default values can be found in /usr/include/termios.h, and are given
-		 in the comments, but we don't need them here
-		 */
-	//	newtio.c_cc[VINTR] = 0; /* Ctrl-c */
-	//	newtio.c_cc[VQUIT] = 0; /* Ctrl-\ */
-	//	newtio.c_cc[VERASE] = 0; /* del */
-	//	newtio.c_cc[VKILL] = 0; /* @ */
-	//	newtio.c_cc[VEOF] = 4; /* Ctrl-d */
-	//	newtio.c_cc[VTIME] = 0; /* inter-character timer unused */
-	//	newtio.c_cc[VMIN] = 1; /* blocking read until 1 character arrives */
-	//	newtio.c_cc[VSWTC] = 0; /* '\0' */
-	//	newtio.c_cc[VSTART] = 0; /* Ctrl-q */
-	//	newtio.c_cc[VSTOP] = 0; /* Ctrl-s */
-	//	newtio.c_cc[VSUSP] = 0; /* Ctrl-z */
-	//	newtio.c_cc[VEOL] = 0; /* '\0' */
-	//	newtio.c_cc[VREPRINT] = 0; /* Ctrl-r */
-	//	newtio.c_cc[VDISCARD] = 0; /* Ctrl-u */
-	//	newtio.c_cc[VWERASE] = 0; /* Ctrl-w */
-	//	newtio.c_cc[VLNEXT] = 0; /* Ctrl-v */
-	//	newtio.c_cc[VEOL2] = 0; /* '\0' */
-
 	/*
 	 now clean the modem line and activate the settings for the port
 	 */
 //	tcflush(fd, TCIFLUSH);
-
 	tcflush(fd, TCIOFLUSH);
 	tcsetattr(fd, TCSADRAIN, &newtio);
 	tcflush(fd, TCIOFLUSH);
@@ -398,7 +367,6 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-	fprintf(stdout, "\n");
 
 	int32_t givenresult = msg_getint32(&currmsg);
 	if (sum != givenresult) {
