@@ -18,7 +18,7 @@ In this challenge, we want you to take the first step in interfacing with the ET
 
 If you can get this to work, then you have achieved the first step of getting the GridBallast device to communicate with the ET and are well on your way.
 
-# The Interrogate Program
+# The `interrogate` Program
 The `interrogate` program will interrogate your device's protocol implementation by sending it two random 32bit values over the USB to serial adapter.
 It will then and wait for the summation response and determine if it has the proper UART mode, parity bit marking, byte count, and summation value.
 If these are all correct, it will emit a message that looks like the following:
