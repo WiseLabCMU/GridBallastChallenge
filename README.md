@@ -20,7 +20,7 @@ If you can get this to work, then you have achieved the first step of getting th
 
 # The `interrogate` Program
 The `interrogate` program will interrogate your device's protocol implementation by sending it two random 32bit values over the USB to serial adapter.
-It will then and wait for the summation response and determine if it has the proper UART mode, parity bit marking, byte count, and summation value.
+It will then wait for the summation response from your device and determine if it has the proper UART mode, parity bit marking, byte count, loose timing, and summation value.
 If these are all correct, it will emit a message that looks like the following:
 ```
 # Success - I sent 671974569 and 1462247110 and received 2134221679
