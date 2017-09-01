@@ -13,7 +13,26 @@ In this challenge, we want you to take the first step in interfacing with the ET
 
 # Details
 * The UART pattern should be 8 data bits, followed by a single mark or space parity bit, followed by 1 stop bit. The first byte of the packet should be marked (parity bit is 1). The remaining bytes of the packet should have a space parity (parity bit is 0). The baud rate is 19200.
-* The provided command line program was compiled for GNU/Linux amd64 and will use an FTDI USB serial converter.
+* The provided command line program was compiled for GNU/Linux amd64 and will use an FTDI USB serial adapter.
 * ESP32 Hardware may not support 9bit communication natively, so you may need to think outside of the box.
 
 If you can get this to work, then you have achieved the first step of getting the GridBallast device to communicate with the ET and are well on your way.
+
+# The Interrogate Program
+The `interrogate` program will interrogate your device's protocol implementation by sending it two random 32bit values over the USB to serial adapter.
+It will then and wait for the summation response and determine if it has the proper UART mode, parity bit marking, byte count, and summation value.
+If these are all correct, it will emit a message that looks like the following:
+```
+# Success - I sent 671974569 and 1462247110 and received 2134221679
+```
+Note that lines starting with a `#` are used to indicate normal steps of program operation.
+
+If you did not see the above success message, this means something went wrong.
+* Lines starting with `Protocol Error - ` indicate that the parity bit was set incorrectly for one or more of the bytes.
+* Lines starting with `Error - ` is used to indicate any other response error.
+* Any lines that do not match any of the previous rules indicate an `interrogate` program runtime error that my not be related to your implementation.
+
+The `interrogate` command takes one optional argument that specifies the path of the USB to serial adapter, if it is not `/dev/ttyUSB0`.
+For example, you may need to run `./interrogate /dev/ttyUSB1` to interrogate the second USB to serial adapter on your machine.
+If you do not have permissions to your USB to serial adapters on your machine, you may run the `interrogate` command with `sudo`.
+Please see `interrogate --help` for more details.
