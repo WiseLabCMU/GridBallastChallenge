@@ -128,7 +128,7 @@ void msg_send(const struct msg *msg, int fd) {
  */
 void alarmhandler(int signo) {
 	assert(signo == SIGALRM);
-	fprintf(stderr, "# Error - You have exceeded the time limit of %u seconds\n", TEST_TIMEOUT_SECONDS);
+	fprintf(stderr, "Error - You have exceeded the time limit of %u seconds\n", TEST_TIMEOUT_SECONDS);
 	exit(EXIT_FAILURE);
 }
 
